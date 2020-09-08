@@ -3,8 +3,6 @@ from tkinter import filedialog
 from tkinter import *
 from tkinter import messagebox
 import glob
-from tkinter import filedialog
-from tkinter import *
 import os
 import urllib.request as urlreq
 #author hilal yavuz
