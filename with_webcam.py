@@ -3,7 +3,7 @@ import glob
 import os
 import urllib.request as urlreq
 #author hilal yavuz
-#adding mustache to images
+#adding mustache and glass to images
 
 haar_url = "https://github.com/hilalalyavuz/adding_mustache/blob/master/haarcascade_frontalface_default.xml"
 haar_file = "haarcascade_frontalface_default.xml"
@@ -28,10 +28,6 @@ cap = cv2.VideoCapture(0)
 while True:
     _,frame = cap.read()
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-    #img = cv2.imread(filename)
-    #imag_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    #width_original = imag_gray.shape[1]
-    #height_original = imag_gray.shape[0]
     faces = face_detector.detectMultiScale(gray)
     _, landmarks = landmark_detector.fit(frame, faces)
     x_coords = []
