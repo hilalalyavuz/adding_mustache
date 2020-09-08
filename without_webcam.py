@@ -6,7 +6,7 @@ import glob
 import os
 import urllib.request as urlreq
 #author hilal yavuz
-#adding mustache to images
+#adding mustache and glass to images
 
 def openfile():
     global filename
@@ -72,7 +72,7 @@ roi_bg = cv2.bitwise_and(roi,roi,mask = mask_inv)
 roi_fg = cv2.bitwise_and(mustache,mustache,mask = mask)
 img[y1:y2, x1:x2] = cv2.add(roi_bg, roi_fg)
 
-#adding glasses to faces
+#adding glass to faces
 glass_url = "https://raw.githubusercontent.com/hilalalyavuz/adding_mustache_glass/master/glasses.png"
 glass_file = "glasses.png"
 if(glass_file not in os.listdir(os.curdir)):
