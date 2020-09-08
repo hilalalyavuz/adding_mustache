@@ -74,6 +74,26 @@ roi_bg = cv2.bitwise_and(roi,roi,mask = mask_inv)
 roi_fg = cv2.bitwise_and(mustache,mustache,mask = mask)
 img[y1:y2, x1:x2] = cv2.add(roi_bg, roi_fg)
 
+#adding glasses to faces
+imgGlass = cv2.imread("glasses.png", -1)
+orig_mask_g = imgGlass[:,:,3]
+orig_mask_inv_g = cv2.bitwise_not(orig_mask_g)
+imgGlass = imgGlass[:,:,0:3]
+origGlassHeight, origGlassWidth = imgGlass.shape[:2]
+glassWidth = int(abs(x_coords[16] - x_coords[1]))
+glassHeight = int(glassWidth * origGlassHeight / origGlassWidth)
+glass = cv2.resize(imgGlass, (glassWidth,glassHeight), interpolation = cv2.INTER_AREA)
+masks = cv2.resize(orig_mask_g, (glassWidth,glassHeight), interpolation = cv2.INTER_AREA)
+masks_inv = cv2.resize(orig_mask_inv_g, (glassWidth,glassHeight), interpolation = cv2.INTER_AREA)
+y1 = int(y_coords[24])
+y2 = int(y1 + glassHeight)
+x1 = int(x_coords[27] - (glassWidth/2))
+x2 = int(x1 + glassWidth)
+roi1 = img[y1:y2, x1:x2]
+roi_bg = cv2.bitwise_and(roi1,roi1,mask = masks_inv)
+roi_fg = cv2.bitwise_and(glass,glass,mask = masks)
+img[y1:y2, x1:x2] = cv2.add(roi_bg, roi_fg)
+
 #show the image
 cv2.imshow('h',img)
 cv2.waitKey(0)
