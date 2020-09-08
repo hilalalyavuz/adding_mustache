@@ -25,6 +25,7 @@ landmark_detector.loadModel(LBFmodel)
 
 #start webcam
 cap = cv2.VideoCapture(0)
+
 #adding mustache to faces
 mustache_url = "https://raw.githubusercontent.com/hilalalyavuz/adding_mustache/master/mustache.png"
 mustache_file = "mustache.png"
@@ -37,7 +38,7 @@ orig_mask_inv = cv2.bitwise_not(orig_mask)
 imgMustache = imgMustache[:,:,0:3]
 origMustacheHeight, origMustacheWidth = imgMustache.shape[:2]
 
-#adding glasses to faces
+#adding glass to faces
 glass_url = "https://raw.githubusercontent.com/hilalalyavuz/adding_mustache_glass/master/glasses.png"
 glass_file = "glasses.png"
 if(glass_file not in os.listdir(os.curdir)):
@@ -47,6 +48,7 @@ orig_mask_g = imgGlass[:,:,3]
 orig_mask_inv_g = cv2.bitwise_not(orig_mask_g)
 imgGlass = imgGlass[:,:,0:3]
 origGlassHeight, origGlassWidth = imgGlass.shape[:2]
+
 while True:
     _,frame = cap.read()
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
@@ -90,13 +92,15 @@ while True:
 
     #show the image
     cv2.imshow('hilal',frame)
-    k = cv2.waitKey(2) & 0xFF
-    if k == 27:
-         break
+    keyCode = cv2.waitKey(2)
 
+    if cv2.getWindowProperty('hilal', cv2.WND_PROP_VISIBLE) < 1:
+        break
 
 cv2.destroyAllWindows()
 cap.release()
+
+
 
 
 
