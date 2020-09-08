@@ -25,6 +25,28 @@ landmark_detector.loadModel(LBFmodel)
 
 #start webcam
 cap = cv2.VideoCapture(0)
+#adding mustache to faces
+mustache_url = "https://raw.githubusercontent.com/hilalalyavuz/adding_mustache/master/mustache.png"
+mustache_file = "mustache.png"
+if(mustache_file not in os.listdir(os.curdir)):
+    urlreq.urlretrieve(mustache_url, mustache_file)
+imgMustache = cv2.imread(mustache_file,-1)
+imgMustache = cv2.imread(mustache_file,-1)
+orig_mask = imgMustache[:,:,3]
+orig_mask_inv = cv2.bitwise_not(orig_mask)
+imgMustache = imgMustache[:,:,0:3]
+origMustacheHeight, origMustacheWidth = imgMustache.shape[:2]
+
+#adding glasses to faces
+glass_url = "https://raw.githubusercontent.com/hilalalyavuz/adding_mustache_glass/master/glasses.png"
+glass_file = "glasses.png"
+if(glass_file not in os.listdir(os.curdir)):
+    urlreq.urlretrieve(glass_url, glass_file)
+imgGlass = cv2.imread(glass_file,-1)
+orig_mask_g = imgGlass[:,:,3]
+orig_mask_inv_g = cv2.bitwise_not(orig_mask_g)
+imgGlass = imgGlass[:,:,0:3]
+origGlassHeight, origGlassWidth = imgGlass.shape[:2]
 while True:
     _,frame = cap.read()
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
@@ -37,16 +59,6 @@ while True:
             x_coords.append(x)
             y_coords.append(y)
 
-    #adding mustache to faces
-    mustache_url = "https://raw.githubusercontent.com/hilalalyavuz/adding_mustache/master/mustache.png"
-    mustache_file = "mustache.png"
-    if(mustache_file not in os.listdir(os.curdir)):
-        urlreq.urlretrieve(mustache_url, mustache_file)
-    imgMustache = cv2.imread(mustache_file,-1)
-    orig_mask = imgMustache[:,:,3]
-    orig_mask_inv = cv2.bitwise_not(orig_mask)
-    imgMustache = imgMustache[:,:,0:3]
-    origMustacheHeight, origMustacheWidth = imgMustache.shape[:2]
     mustacheWidth = int(abs(3 * (x_coords[31] - x_coords[35])))
     mustacheHeight = int(mustacheWidth * origMustacheHeight / origMustacheWidth) - 10
     mustache = cv2.resize(imgMustache, (mustacheWidth,mustacheHeight), interpolation = cv2.INTER_AREA)
@@ -61,16 +73,7 @@ while True:
     roi_fg = cv2.bitwise_and(mustache,mustache,mask = mask)
     frame[y1:y2, x1:x2] = cv2.add(roi_bg, roi_fg)
 
-    #adding glasses to faces
-    glass_url = "https://raw.githubusercontent.com/hilalalyavuz/adding_mustache_glass/master/glasses.png"
-    glass_file = "glasses.png"
-    if(glass_file not in os.listdir(os.curdir)):
-        urlreq.urlretrieve(glass_url, glass_file)
-    imgGlass = cv2.imread(glass_file,-1)
-    orig_mask_g = imgGlass[:,:,3]
-    orig_mask_inv_g = cv2.bitwise_not(orig_mask_g)
-    imgGlass = imgGlass[:,:,0:3]
-    origGlassHeight, origGlassWidth = imgGlass.shape[:2]
+
     glassWidth = int(abs(x_coords[16] - x_coords[1]))
     glassHeight = int(glassWidth * origGlassHeight / origGlassWidth)
     glass = cv2.resize(imgGlass, (glassWidth,glassHeight), interpolation = cv2.INTER_AREA)
@@ -87,12 +90,15 @@ while True:
 
     #show the image
     cv2.imshow('hilal',frame)
-    k = cv2.waitKey(5) & 0xFF
+    k = cv2.waitKey(2) & 0xFF
     if k == 27:
-        break
+         break
+
 
 cv2.destroyAllWindows()
 cap.release()
+
+
 
 
 
